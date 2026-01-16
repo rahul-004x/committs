@@ -64,9 +64,11 @@ void (async function() {
       choices: ["Y", "n"],
     },
   );
+
+  $.verbose = true
   echo("\n");
 
   if (commitConfimation !== "n") {
-    `$ git commit -m ${cleanedUpAiCommit}`;
+    await $`git commit -m ${cleanedUpAiCommit}`;
   }
 })();
