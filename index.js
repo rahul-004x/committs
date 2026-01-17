@@ -1,4 +1,4 @@
-#!/usr/bin/env z
+#!/usr/bin/env zx
 
 import { $, echo, fs, question } from "zx";
 import chalk from "chalk";
