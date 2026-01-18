@@ -2,9 +2,15 @@
 
 import { $, echo, fs, question } from "zx";
 import chalk from "chalk";
+import { getConfig } from "./src/utit";
 
-void (async function () {
+void (async function() {
+  console.log(chalk.gray("Generating ai messages...."));
+
   let pwd = await $`pwd`;
+
+  const config = await getConfig()
+  const apiKey = config.OPENROUTRE_API_KEY
 
   const { OPENROUTER_API_KEY } = await fs.readJson(
     `${pwd.stdout.trim()}/.env.json`,
@@ -25,11 +31,11 @@ void (async function () {
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+        Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "z-ai/glm-4.5-air:free",
+        model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: prompt },
           {
@@ -44,7 +50,6 @@ void (async function () {
   const jsonResponse: any = await response.json();
 
   if (jsonResponse.error) {
-
     console.error(
       chalk.red("API Error:"),
       JSON.stringify(jsonResponse.error, null, 2),
@@ -71,5 +76,3 @@ void (async function () {
     await $`git commit -m ${cleanedUpAiCommit}`;
   }
 })();
-
-
