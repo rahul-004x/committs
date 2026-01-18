@@ -18,6 +18,6 @@
 
 4. You're ready to go!
 
-   Run `committs` in any Git repo and it will generate a commit message for you.
+   Run `committs` in any Git repo and it will generate a commit message.
 
 
