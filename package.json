@@ -4,7 +4,7 @@
   "description": "AI-powered git commit message generator",
   "main": "index.ts",
   "bin": {
-    "committs": "./index.ts"
+    "committs": "./cli.js"
   },
   "type": "module",
   "private": false,

@@ -1,20 +1,14 @@
-#!/usr/bin/env zx
+#!/usr/bin/env node
 
 import { $, echo, fs, question } from "zx";
 import chalk from "chalk";
-import { getConfig } from "./src/utit";
+import { getConfig } from "./util";
 
 void (async function() {
   console.log(chalk.gray("Generating ai messages...."));
 
-  let pwd = await $`pwd`;
-
-  const config = await getConfig()
-  const apiKey = config.OPENROUTRE_API_KEY
-
-  const { OPENROUTER_API_KEY } = await fs.readJson(
-    `${pwd.stdout.trim()}/.env.json`,
-  );
+  const config = await getConfig();
+  const apiKey = config.OPENROUTER_API_KEY;
 
   const diffResult = await $`git diff --cached`;
   const diff = diffResult.stdout.trim();
@@ -69,7 +63,7 @@ void (async function() {
     },
   );
 
-  $.verbose = true
+  $.verbose = true;
   echo("\n");
 
   if (commitConfimation !== "n") {
