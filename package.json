@@ -1,16 +1,22 @@
 {
-  "name": "committs",
+  "name": "@rahul-004x/committs",
   "version": "1.0.0",
   "description": "AI-powered git commit message generator",
-  "main": "index.ts",
+  "main": "dist/cli.js",
   "bin": {
-    "committs": "./cli.js"
+    "committs": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "cli.js"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "bun index.ts",
+    "prepublishOnly": "npm run build"
   },
   "type": "module",
   "private": false,
-  "scripts": {
-    "start": "bun index.ts"
-  },
   "engines": {
     "node": ">=18"
   },

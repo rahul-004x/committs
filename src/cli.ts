@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { $, echo, fs, question } from "zx";
+import { $, echo, question } from "zx";
 import chalk from "chalk";
-import { getConfig } from "./util";
+import { getConfig } from "./util.js";
 
 void (async function() {
-  console.log(chalk.gray("Generating ai messages...."));
+  console.log(chalk.white("Generating ai messages...."));
 
   const config = await getConfig();
   const apiKey = config.OPENROUTER_API_KEY;

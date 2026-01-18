@@ -1,15 +1,23 @@
-# committs
+## Installation and Usage
 
-To install dependencies:
+1. Install the CLI:
 
-```bash
-bun install
-```
+   ```sh
+   npm install -g committs 
+   ```
 
-To run:
+2. Retrieve your API key from [OpenRouter]("https://openrouter.ai/settings/keys")
 
-```bash
-bun run index.ts
-```
+   > Note: If you haven't already, you'll have to create an account and set up billing.
 
-This project was created using `bun init` in bun v1.3.4. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+3. Set the key so aicommits can use it:
+
+   ```sh
+   echo "OPENROUTER_API_KEY=<your token>" >> ~/.committs
+   ```
+
+4. You're ready to go!
+
+   Run `committs` in any Git repo and it will generate a commit message for you.
+
+
