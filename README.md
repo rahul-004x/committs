@@ -1,25 +1,43 @@
-## Installation and Usage
+# committs
 
-1. Install the CLI:
+AI-powered git commit message generator. Automatically generates semantic commit messages for your staged changes. 
 
-   ```sh
-   npm install -g @rahul-004x/committs 
-   # or 
-   bun install -g @rahul-004x/committs
-   ```
+## What it does
 
-2. Retrieve your API key from [OpenRouter]("https://openrouter.ai/settings/keys")
+1. Detects staged git changes
+2. Sends the diff to AI (via OpenRouter)
+3. Generates a semantic commit message
+4. Lets you review and confirm before committing
 
-   > Note: If you haven't already, you'll have to create an account and set up billing.
+## Setup API Key (Required First)
 
-3. Set the key so aicommits can use it:
+1. Get your API key from [OpenRouter](https://openrouter.ai/settings/keys)
+2. Set the API key:
 
-   ```sh
-   echo "OPENROUTER_API_KEY=<your token>" >> ~/.committs
-   ```
+```sh
+echo "OPENROUTER_API_KEY=<your-token>" >> ~/.committs
+```
 
-4. You're ready to go!
+## Installation
 
-   Run `committs` in any Git repo and it will generate a commit message.
+### Quick Start (No Installation)
 
+```sh
+npx @rahul-004x/committs
+# or
+bunx @rahul-004x/committs
+```
 
+### Global Installation
+
+```sh
+npm install -g @rahul-004x/committs
+# or
+bun install -g @rahul-004x/committs
+```
+
+Then run with:
+
+```sh
+committs
+```
