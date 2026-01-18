@@ -1,11 +1,9 @@
-#!/usr/bin/env z
+#!/usr/bin/env zx
 
 import { $, echo, fs, question } from "zx";
 import chalk from "chalk";
 
-void (async function() {
-  console.log(chalk.gray("Generating ai messages...."));
-
+void (async function () {
   let pwd = await $`pwd`;
 
   const { OPENROUTER_API_KEY } = await fs.readJson(
@@ -43,9 +41,10 @@ void (async function() {
     },
   );
 
-  const jsonResponse = await response.json();
+  const jsonResponse: any = await response.json();
 
   if (jsonResponse.error) {
+
     console.error(
       chalk.red("API Error:"),
       JSON.stringify(jsonResponse.error, null, 2),
@@ -72,3 +71,5 @@ void (async function() {
     await $`git commit -m ${cleanedUpAiCommit}`;
   }
 })();
+
+
