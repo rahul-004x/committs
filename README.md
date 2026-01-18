@@ -3,7 +3,9 @@
 1. Install the CLI:
 
    ```sh
-   npm install -g committs 
+   npm install -g @rahul-004x/committs 
+   # or 
+   bun install -g @rahul-004x/committs
    ```
 
 2. Retrieve your API key from [OpenRouter]("https://openrouter.ai/settings/keys")
