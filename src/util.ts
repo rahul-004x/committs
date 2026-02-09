@@ -6,7 +6,8 @@ import ini from "ini"
 const fileExist = (filePath: string) => fs.access(filePath).then(() => true, () => false)
 
 type ConfigType = {
-  OPENROUTER_API_KEY?: string
+  OPENROUTER_API_KEY?: string,
+  AI_MODEL?: string
 }
 
 export const getConfig =  async (): Promise<ConfigType> => {
