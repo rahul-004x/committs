@@ -2,69 +2,76 @@
 
 import { $, echo, question } from "zx";
 import chalk from "chalk";
-import { cli, command } from "cleye";
+import { cli } from "cleye";
+import { intro, outro, spinner } from "@clack/prompts";
 import { getConfig } from "./util.js";
 import setupCommand from "./commands/setup.js";
 import { getProvider } from "./features/providers/index.js";
 
-const mainCommand = command(
-  {
-    name: "committs",
-    description: "AI-powered git commit message generator",
-  },
-  () => {
-    void (async function() {
-      console.log(chalk.white("Generating ai messages...."));
+const defaultCommand = async () => {
+    intro(chalk.inverse(" committs "));
 
-      const config = await getConfig();
-      const providerId = config.PROVIDER || "openrouter";
-      const provider = getProvider(providerId);
+    const s = spinner();
+    s.start("Generating AI commit message...");
 
-      if (!provider) {
-        console.error(chalk.red(`Unknown provider: ${providerId}. Please run 'committs setup' again.`));
-        process.exit(1);
-      }
+    const config = await getConfig();
+    const providerId = config.PROVIDER || "openrouter";
+    const provider = getProvider(providerId);
 
-      const diffResult = await $`git diff --cached`;
-      const diff = diffResult.stdout.trim();
+    if (!provider) {
+      s.stop("Failed");
+      console.error(chalk.red(`\n✖ Unknown provider: ${providerId}. Please run 'committs setup' again.`));
+      process.exit(1);
+    }
 
-      if (!diff) {
-        console.log(chalk.yellow("No staged changes found."));
-        process.exit(0);
-      }
+    const diffResult = await $`git diff --cached`;
+    const diff = diffResult.stdout.trim();
 
-      const prompt = `I want you to act like a git commit writer. I will give you a diff and your task is to write a semantic git commit message strictly semantic. Return only the commit message, a complete sentence, and do not repeat yourself.`;
+    if (!diff) {
+      s.stop("No changes");
+      outro(chalk.yellow("No staged changes found. Did you forget to `git add`?"));
+      process.exit(0);
+    }
 
-      let aiCommit;
-      try {
-        aiCommit = await provider.generateCommit(diff, prompt, config);
-      } catch (error: any) {
-        console.error(chalk.red(`${provider.displayName} API Error:`), error.message);
-        process.exit(1);
-      }
+    const prompt = `I want you to act like a git commit writer. I will give you a diff and your task is to write a semantic git commit message strictly semantic. Return only the commit message, a complete sentence, and do not repeat yourself max words you can use is 20 and try to make it as short as possible.`;
+    
+    let aiCommit;
+    try {
+      aiCommit = await provider.generateCommit(diff, prompt, config);
+    } catch (error: any) {
+      s.stop("Error");
+      console.error(chalk.red(`\n✖ ${provider.displayName} API Error:`), error.message);
+      process.exit(1);
+    }
 
-      let cleanedUpAiCommit = aiCommit.replace(/(\r\n|\n|\r)/gm, "").trim();
+    let cleanedUpAiCommit = aiCommit.replace(/(\r\n|\n|\r)/gm, "").trim();
 
-      console.log(chalk.green("Commit message:"), cleanedUpAiCommit);
+    s.stop("Message generated!");
 
-      const commitConfimation = await question(
-        "\n Would you like to commit " + chalk.yellow("(y/n): "),
-        {
-          choices: ["Y", "n"],
-        },
-      );
+    console.log(`\n🤖 ${chalk.cyan.bold("Proposed Commit:")}`);
+    console.log(`${chalk.gray("│")}  ${chalk.white(cleanedUpAiCommit)}`);
+    console.log(`${chalk.gray("└─────────────────────────────────────────")}\n`);
 
+    const commitConfimation = await question(
+      chalk.white("Would you like to commit? ") + chalk.gray("(Y/n): "),
+      {
+        choices: ["Y", "n", "y", "N"],
+      },
+    );
+
+    if (commitConfimation.toLowerCase() !== "n") {
       $.verbose = true;
       echo("\n");
-
-      if (commitConfimation !== "n") {
-        await $`git commit -m "${cleanedUpAiCommit}"`;
-      }
-    })();
-  },
-);
+      await $`git commit -m "${cleanedUpAiCommit}"`;
+      outro(chalk.green("✔ Successfully committed!"));
+    } else {
+      outro(chalk.yellow("✖ Commit cancelled"));
+    }
+};
 
 cli({
   name: "committs",
-  commands: [setupCommand, mainCommand],
+  commands: [setupCommand],
+}, (argv) => {
+  void defaultCommand();
 });
