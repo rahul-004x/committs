@@ -5,6 +5,7 @@ import chalk from "chalk";
 import { cli, command } from "cleye";
 import { getConfig } from "./util.js";
 import setupCommand from "./commands/setup.js";
+import { getProvider } from "./features/providers/index.js";
 
 const mainCommand = command(
   {
@@ -16,8 +17,13 @@ const mainCommand = command(
       console.log(chalk.white("Generating ai messages...."));
 
       const config = await getConfig();
-      const apiKey = config.OPENROUTER_API_KEY;
-      const model = config.AI_MODEL;
+      const providerId = config.PROVIDER || "openrouter";
+      const provider = getProvider(providerId);
+
+      if (!provider) {
+        console.error(chalk.red(`Unknown provider: ${providerId}. Please run 'committs setup' again.`));
+        process.exit(1);
+      }
 
       const diffResult = await $`git diff --cached`;
       const diff = diffResult.stdout.trim();
@@ -29,44 +35,20 @@ const mainCommand = command(
 
       const prompt = `I want you to act like a git commit writer. I will give you a diff and your task is to write a semantic git commit message strictly semantic. Return only the commit message, a complete sentence, and do not repeat yourself.`;
 
-      const response = await fetch(
-        "https://openrouter.ai/api/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: `${model}`,
-            messages: [
-              { role: "system", content: prompt },
-              {
-                role: "user",
-                content: diff,
-              },
-            ],
-          }),
-        },
-      );
-
-      const jsonResponse: any = await response.json();
-
-      if (jsonResponse.error) {
-        console.error(
-          chalk.red("API Error:"),
-          JSON.stringify(jsonResponse.error, null, 2),
-        );
+      let aiCommit;
+      try {
+        aiCommit = await provider.generateCommit(diff, prompt, config);
+      } catch (error: any) {
+        console.error(chalk.red(`${provider.displayName} API Error:`), error.message);
         process.exit(1);
       }
 
-      const aiCommit = jsonResponse.choices[0].message.content;
       let cleanedUpAiCommit = aiCommit.replace(/(\r\n|\n|\r)/gm, "").trim();
 
       console.log(chalk.green("Commit message:"), cleanedUpAiCommit);
 
       const commitConfimation = await question(
-        "\n Would you like to commit" + chalk.yellow("(y/n): "),
+        "\n Would you like to commit " + chalk.yellow("(y/n): "),
         {
           choices: ["Y", "n"],
         },
@@ -76,7 +58,7 @@ const mainCommand = command(
       echo("\n");
 
       if (commitConfimation !== "n") {
-        await $`git commit -m ${cleanedUpAiCommit}`;
+        await $`git commit -m "${cleanedUpAiCommit}"`;
       }
     })();
   },
