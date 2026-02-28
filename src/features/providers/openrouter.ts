@@ -81,15 +81,20 @@ export class OpenRouterProvider extends BaseProvider {
         OPENROUTER_API_KEY: apiKey as string,
         AI_MODEL: modelChoice as string,
       });
-
     } catch (error) {
       s.stop("Failed to fetch models");
-      cancel(`Error: ${error instanceof Error ? error.message : "Unknown error"}`);
+      cancel(
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
       process.exit(1);
     }
   }
 
-  async generateCommit(diff: string, prompt: string, config: ConfigType): Promise<string> {
+  async generateCommit(
+    diff: string,
+    prompt: string,
+    config: ConfigType,
+  ): Promise<string> {
     const apiKey = config.OPENROUTER_API_KEY;
     const model = config.AI_MODEL;
 
