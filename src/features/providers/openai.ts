@@ -47,7 +47,11 @@ export class OpenAIProvider extends BaseProvider {
     });
   }
 
-  async generateCommit(diff: string, prompt: string, config: ConfigType): Promise<string> {
+  async generateCommit(
+    diff: string,
+    prompt: string,
+    config: ConfigType,
+  ): Promise<string> {
     const apiKey = config.OPENAI_API_KEY;
     const model = config.AI_MODEL;
 
