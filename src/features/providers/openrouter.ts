@@ -99,7 +99,7 @@ export class OpenRouterProvider extends BaseProvider {
     const model = config.AI_MODEL;
 
     if (!apiKey) {
-      throw new Error("OpenRouter API key is missing. Please run setup first.");
+      throw new Error("API key is missing. Please run `committs setup` to configure your provider.");
     }
 
     const response = await fetch(`${baseUrl}/chat/completions`, {

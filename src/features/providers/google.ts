@@ -23,11 +23,11 @@ export class GoogleAIProvider extends BaseProvider {
     }
 
     const modelOptions = [
+      { value: "gemini-3.0-pro", label: "gemini-3.0-pro" },
+      { value: "gemini-3.0-flash", label: "gemini-3.0-flash" },
       { value: "gemini-2.5-pro", label: "gemini-2.5-pro" },
       { value: "gemini-2.5-flash", label: "gemini-2.5-flash" },
       { value: "gemini-2.0-flash", label: "gemini-2.0-flash" },
-      { value: "gemini-1.5-pro", label: "gemini-1.5-pro" },
-      { value: "gemini-1.5-flash", label: "gemini-1.5-flash" },
     ];
 
     const modelChoice = await select({
@@ -52,7 +52,7 @@ export class GoogleAIProvider extends BaseProvider {
     const model = config.AI_MODEL;
 
     if (!apiKey) {
-      throw new Error("Google API key is missing. Please run setup first.");
+      throw new Error("API key is missing. Please run `committs setup` to configure your provider.");
     }
 
     // Google Gemini REST API format

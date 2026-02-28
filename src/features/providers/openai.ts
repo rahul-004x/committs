@@ -25,6 +25,8 @@ export class OpenAIProvider extends BaseProvider {
     }
 
     const modelOptions = [
+      { value: "gpt-5", label: "gpt-5" },
+      { value: "gpt-5-turbo", label: "gpt-5-turbo" },
       { value: "gpt-4o", label: "gpt-4o" },
       { value: "gpt-4-turbo", label: "gpt-4-turbo" },
       { value: "gpt-3.5-turbo", label: "gpt-3.5-turbo" },
@@ -56,7 +58,7 @@ export class OpenAIProvider extends BaseProvider {
     const model = config.AI_MODEL;
 
     if (!apiKey) {
-      throw new Error("OpenAI API key is missing. Please run setup first.");
+      throw new Error("API key is missing. Please run `committs setup` to configure your provider.");
     }
 
     const response = await fetch(`${baseUrl}/chat/completions`, {
