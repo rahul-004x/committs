@@ -11,13 +11,34 @@ AI-powered git commit message generator. Automatically generates semantic commit
 
 ## Installation
 
+### Quick Start (No Installation)
+
+````sh
+# 1. Setup your AI provider
+npx @rahul-004x/committs setup
+
+# 2. Stage your changes
+git add .
+
+# 3. Generate commit message
+npx @rahul-004x/committs
+```
+
+### Global Installation
+
+```sh
+npm install -g @rahul-004x/committs
+# or
+bun install -g @rahul-004x/committs
+```
+
 ## Setup & Usage
 
 **1. Configure your AI Provider (Required)**
 
 ```sh
 committs setup
-```
+````
 
 _You will be prompted to choose between OpenAI, Google AI, or OpenRouter, provide your API key, and select a model._
 
