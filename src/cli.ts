@@ -39,7 +39,12 @@ const defaultCommand = async () => {
     process.exit(0);
   }
 
-  const prompt = `I want you to act like a git commit writer. I will give you a diff and your task is to write a semantic git commit message strictly semantic. Return only the commit message, a complete sentence, and do not repeat yourself max words you can use is 20 and try to make it as short as possible.`;
+  const prompt = `I want you to act as a git commit message writer. Generate a commit message following:
+1. Conventional Commits format: <type>(<scope>): <description>
+2. 50/72 rule: Subject line max 50 chars, body wrapped at 72 chars
+3. Allowed types: feat, fix, docs, style, refactor, perf, test, chore, build, ci, revert
+4. Use imperative mood, lowercase, no period in subject
+5. Return ONLY the commit message, no explanations.`;
 
   let aiCommit;
   try {

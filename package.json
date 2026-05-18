@@ -24,7 +24,8 @@
     "git",
     "commit",
     "ai",
-    "cli"
+    "cli",
+    "conventional-commits"
   ],
   "author": "",
   "license": "MIT",
