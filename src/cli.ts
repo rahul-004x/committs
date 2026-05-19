@@ -52,7 +52,7 @@ const defaultCommand = async () => {
   } catch (error: any) {
     s.stop("Error");
     console.error(
-      chalk.red(`\n× ${provider.displayName} API Error:`),
+      chalk.red(`\n× ${provider.displayName} API Error Maybe rach api limit:`),
       error.message,
     );
     process.exit(1);
