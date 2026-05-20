@@ -1,6 +1,19 @@
+# committs
+
+AI-powered git commit message generator. Automatically generates semantic commit messages for your staged changes using your choice of AI provider (OpenAI, Google AI, or OpenRouter).
+
+## What it does
+
+1. Detects staged git changes
+2. Sends the diff to your configured AI provider
+3. Generates a pristine, semantic commit message
+4. Lets you review and confirm before committing
+
+## Installation
+
 ### Quick Start (No Installation)
 
-````sh
+```sh
 # 1. Setup your AI provider
 npx @rahul-004x/committs setup
 
@@ -23,9 +36,9 @@ bun install -g @rahul-004x/committs
 
 **1. Configure your AI Provider (Required)**
 
-```sh
+```
 committs setup
-````
+```
 
 _You will be prompted to choose between OpenAI, Google AI, or OpenRouter, provide your API key, and select a model._
 
